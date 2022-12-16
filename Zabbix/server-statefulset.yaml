@@ -24,6 +24,18 @@ spec:
           volumeMounts:
             - name: zabbix-server-data
               mountPath: /usr/lib/zabbix
+          livenessProbe:
+            tcpSocket:
+              port: 10051
+            failureThreshold: 3
+            periodSeconds: 10
+            initialDelaySeconds: 60
+          readinessProbe:
+            tcpSocket:
+              port: 10051
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 60
       volumes:
         - name: zabbix-server-data
           persistentVolumeClaim:

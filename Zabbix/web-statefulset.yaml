@@ -26,6 +26,20 @@ spec:
           volumeMounts:
             - name: zabbix-web-data
               mountPath: /etc/ssl/apache2
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 3
+            initialDelaySeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 60
       volumes:
         - name: zabbix-web-data
           persistentVolumeClaim:
