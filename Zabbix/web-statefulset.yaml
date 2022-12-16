@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zabbix-web-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: zabbix-web
+  serviceName: svc-zabbix-web
+  replicas: 2
+  template:
+    metadata:
+        name: zabbix-web
+        labels:
+          app: zabbix-web
+    spec:
+      containers:
+        - name: zabbix-web-container
+          image: zabbix/zabbix-web-apache-pgsql:6.0-ubuntu-latest
+          ports:
+            - containerPort: 8080
+            - containerPort: 8443
+          envFrom:
+            - configMapRef:
+                name: zabbix-web-configmap
+          volumeMounts:
+            - name: zabbix-web-data
+              mountPath: /etc/ssl/apache2
+      volumes:
+        - name: zabbix-web-data
+          persistentVolumeClaim:
+            claimName: web-pvc

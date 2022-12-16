@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zabbix-db-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: zabbix-db
+  serviceName: svc-zabbix-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zabbix-db
+    spec:
+      containers:
+      - name: zabbix-db-container
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+        envFrom:
+          - configMapRef:
+              name: zabbix-db-configmap
+        volumeMounts:
+        - name: zabix-db-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: zabix-db-data
+          persistentVolumeClaim:
+            claimName: db-pvc

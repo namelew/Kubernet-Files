@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zabbix-db-configmap
+data:
+  POSTGRES_USER: zabbix
+  POSTGRES_PASSWORD: zabbix
+  DB_DATABASE: zabbix
+  POSTGRES_ROOT_PASSWORD: zabbix
+  POSTGRES_INITDB_ARGS: "--encoding=UTF8"

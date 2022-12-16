@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zabbix-server-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: zabbix-server
+  serviceName: svc-zabbix-server
+  template:
+    metadata:
+      name: zabbix-server
+      labels:
+        app: zabbix-server
+    spec:
+      containers:
+        - name: zabbix-server-container
+          image: zabbix/zabbix-server-pgsql:6.0-ubuntu-latest
+          ports:
+            - containerPort: 10051
+          envFrom:
+            - configMapRef:
+                name: zabbix-server-configmap
+          volumeMounts:
+            - name: zabbix-server-data
+              mountPath: /usr/lib/zabbix
+      volumes:
+        - name: zabbix-server-data
+          persistentVolumeClaim:
+            claimName: server-pvc
