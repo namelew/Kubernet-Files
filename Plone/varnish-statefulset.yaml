@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: plone-varnish-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: plone-varnish
+  serviceName: svc-plone-varnish
+  replicas: 1
+  template:
+    metadata:
+        name: plone-varnish
+        labels:
+          app: plone-varnish
+    spec:
+      containers:
+        - name: plone-varnish-container
+          image: varnish:7.2-alpine
+          ports:
+            - containerPort: 80
+            - containerPort: 8443
+          envFrom:
+            - configMapRef:
+                name: plone-varnish-configmap
+          volumeMounts:
+            - name: plone-varnish-config
+              mountPath: /etc/varnish/
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 3
+      volumes:
+        - name: plone-varnish-config
+          persistentVolumeClaim:
+            claimName: plone-varnish-pvc

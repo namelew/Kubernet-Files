@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: plone-client-configmap
+data:
+  ZEO_ADDRESS: svc-plone-zeo
+  ZEO_READ_ONLY: "off"
+  ZEO_CLIENT_READ_ONLY_FALLBACK: "false"
+  ZEO_SHARED_BLOB_DIR: "off"
+  ZEO_STORAGE: "1"
+  ZEO_CLIENT_CACHE_SIZE: 128MB
+  ZEO_PACK_KEEP_OLD: "true"
+  HEALTH_CHECK_TIMEOUT: "1"
+  HEALTH_CHECK_INTERVAL: "1"

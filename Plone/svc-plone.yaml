@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-plone-client
+spec:
+  type: ClusterIP
+  selector:
+    app: plone-client
+  ports:
+  - port: 8080

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: plone-zeo-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: plone-zeo
+  serviceName: svc-plone-zeo
+  replicas: 1
+  template:
+    metadata:
+        name: plone-zeo
+        labels:
+          app: plone-zeo
+    spec:
+      containers:
+        - name: plone-zeo-container
+          image: plone/plone-zeo
+          ports:
+            - containerPort: 8100
+          envFrom:
+            - configMapRef:
+                name: plone-zeo-configmap
+          volumeMounts:
+            - name: plone-zeo-data
+              mountPath: /data
+      volumes:
+        - name: plone-zeo-data
+          persistentVolumeClaim:
+            claimName: plone-zeo-pvc

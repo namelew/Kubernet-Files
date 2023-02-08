@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: plone-plone-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: plone-client
+  serviceName: svc-plone-client
+  replicas: 3
+  template:
+    metadata:
+        name: plone-client
+        labels:
+          app: plone-client
+    spec:
+      containers:
+        - name: plone-client-container
+          image: plone/plone-zeo
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: plone-client-configmap
+          volumeMounts:
+            - name: plone-client-blob
+              mountPath: /plone/
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 3
+      volumes:
+        - name: plone-client-blob
+          persistentVolumeClaim:
+            claimName: plone-client-pvc
