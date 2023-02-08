@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: plone-client-configmap
 data:
-  ZEO_ADDRESS: svc-plone-zeo
+  ZEO_ADDRESS: svc-plone-zeo:8100
   ZEO_READ_ONLY: "off"
   ZEO_CLIENT_READ_ONLY_FALLBACK: "false"
   ZEO_SHARED_BLOB_DIR: "off"

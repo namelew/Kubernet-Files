@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: plone-client-container
-          image: plone/plone-zeo
+          image: plone/plone-backend
           ports:
             - containerPort: 8080
           envFrom:
@@ -25,20 +25,6 @@ spec:
           volumeMounts:
             - name: plone-client-blob
               mountPath: /plone/
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8080
-            periodSeconds: 10
-            failureThreshold: 3
-            initialDelaySeconds: 20
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8080
-            periodSeconds: 10
-            failureThreshold: 5
-            initialDelaySeconds: 3
       volumes:
         - name: plone-client-blob
           persistentVolumeClaim:
